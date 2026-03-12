@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Set;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,8 +33,8 @@ class DepositWithdrawRequestValidationTest {
     void validRequestPassesValidation() {
         DepositWithdrawRequest request = DepositWithdrawRequest.builder()
             .amount(new BigDecimal("100.50"))
-            .sourceWallet(UUID.randomUUID())
-            .destinationWallet(UUID.randomUUID())
+            .sourceWalletEmail("source@example.com")
+            .destinationWalletEmail("destination@example.com")
             .build();
 
         Set<ConstraintViolation<DepositWithdrawRequest>> violations = validator.validate(request);
@@ -47,8 +46,8 @@ class DepositWithdrawRequestValidationTest {
     void nonPositiveAmountFailsValidation() {
         DepositWithdrawRequest request = DepositWithdrawRequest.builder()
             .amount(new BigDecimal("0"))
-            .sourceWallet(UUID.randomUUID())
-            .destinationWallet(UUID.randomUUID())
+            .sourceWalletEmail("source@example.com")
+            .destinationWalletEmail("destination@example.com")
             .build();
 
         Set<ConstraintViolation<DepositWithdrawRequest>> violations = validator.validate(request);
@@ -58,11 +57,11 @@ class DepositWithdrawRequestValidationTest {
 
     @Test
     void sameWalletFailsValidation() {
-        UUID walletId = UUID.randomUUID();
+        String walletEmail = "same@example.com";
         DepositWithdrawRequest request = DepositWithdrawRequest.builder()
             .amount(new BigDecimal("10.00"))
-            .sourceWallet(walletId)
-            .destinationWallet(walletId)
+            .sourceWalletEmail(walletEmail)
+            .destinationWalletEmail(walletEmail)
             .build();
 
         Set<ConstraintViolation<DepositWithdrawRequest>> violations = validator.validate(request);
@@ -70,4 +69,3 @@ class DepositWithdrawRequestValidationTest {
         assertThat(violations).anyMatch(v -> "walletCombinationValid".equals(v.getPropertyPath().toString()));
     }
 }
-
