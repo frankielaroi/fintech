@@ -26,9 +26,12 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-fintech}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-fintech}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-fintech}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-fintech}
+      DB_USERNAME: ${POSTGRES_USER:-fintech}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-fintech}
+      DB_SSL_MODE: disable
       APP_JWT_SECRET: ${APP_JWT_SECRET:-fintech-secret-key-please-change-this-value-123456}
     ports:
       - "8080:8080"
@@ -36,4 +39,3 @@ services:
 
 volumes:
   postgres_data:
-
